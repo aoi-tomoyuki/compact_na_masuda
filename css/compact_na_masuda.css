@@ -1,0 +1,32 @@
+button.reply_button {
+	margin: 0 1em;
+}
+
+/*** list page ***/
+.hidden_masuda_content {
+	display: none;
+}
+
+div#body div.section h3.section_header {
+	font-size:100%;
+}
+
+div.collapse_section {
+	border-bottom: 1px solid #5279e7;
+}
+
+div.section p.chokotto_content {
+	font-size: 90%;
+	margin-left: .8em;
+}
+span.toggle_button {
+	color: tomato;
+	margin-right: .5em;
+	cursor:pointer;
+}
+
+/*** edit form ***/
+#text-body {
+	width: 450px;
+	height:100px;
+}

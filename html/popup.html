@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>コンパクトな増田</title>
+<style>
+body {
+	background-color: whitesmoke;
+	width: 400px;
+}
+
+h3 {
+	background-color: royalblue;
+	color: white;
+	font-weight: bold;
+	padding: .5em;
+}
+
+h4 {
+	margin-bottom: .7em;
+}
+
+hr {
+	border: 1px solid #5279e7;
+	margin-bottom: 1em;
+}
+
+ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+div {
+	margin-bottom: 1.5em;
+}
+</style>
+<script src="../js/popup.js"></script>
+
+</head>
+<body>
+	<h3>コンパクトな増田　オプション</h3>
+	<div>
+		<input type="checkbox" id="id_disable_kore" name="disable_kore">
+		<label for="id_disable_kore">拡張の表示を無効にする</label>
+	</div>
+	<hr>
+	<div>
+		<ul>
+			<li>
+				<input type="radio" id="id_hidden_reply_0" name="hidden_reply" value="0">
+				<label for="id_hidden_reply_0">返信の非表示処理をしない</label>
+			</li>
+			<li>
+				<input type="radio" id="id_hidden_reply_1" name="hidden_reply" value="1">
+				<label for="id_hidden_reply_1">タイトルに返信リンクがある記事を非表示</label>
+			</li>
+			<li>
+				<input type="radio" id="id_hidden_reply_2" name="hidden_reply" value="2">
+				<label for="id_hidden_reply_2">タイトル、本文中に返信リンクがある記事を非表示</label>
+			</li>
+		</ul>
+	</div>
+	<div>
+		<input type="checkbox" id="id_collapse_content" name="collapse_content">
+		<label for="id_collapse_content">折りたたみ表示</label>
+	</div>
+	<div>
+		<input type="checkbox" id="id_reply_button" name="reply_button">
+		<label for="id_reply_button">返信ボタンを使う</label>
+	</div>
+	<div>
+		本文が<input type="text" id="id_less_character" name="less_character" size="5">文字以下は非表示
+	</div>
+	<div>
+		<h4>NGワード(1ワード1行)</h4>
+		<textarea id="id_ng_word" rows="5" cols="40" name="ng_word"></textarea>
+	</div>
+	<hr>
+	<div>
+		<button id="apply_button" type="button">適用</button>
+	</div>
+</body>
+</html>
