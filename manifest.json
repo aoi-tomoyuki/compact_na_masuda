@@ -1,6 +1,6 @@
 {
   "name": "コンパクトな増田",
-  "version": "1.2",
+  "version": "1.2.1",
   "manifest_version": 2,
   "description": "増田をコンパクトに表示できるんだ",
   "background": { "page": "html/background.html"},
