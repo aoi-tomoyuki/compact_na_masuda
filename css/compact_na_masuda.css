@@ -1,5 +1,18 @@
+/* common */
 button.reply_button {
 	margin: 0 1em;
+}
+
+.masud_content_tooltip {
+	position: absolute;
+	padding: 1em;
+	z-index: 9999;
+	background-color: #fafad2;
+	border: 1px solid #000000;
+	border-radius: 0.5em;
+	text-align: left;
+	width: 80%;
+	font-size: 80%;
 }
 
 /*** list page ***/

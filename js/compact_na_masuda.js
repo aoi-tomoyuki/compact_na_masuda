@@ -4,6 +4,7 @@
 		hidden_reply: '1',
 		collapse_content: true,
 		reply_button: true,
+		enable_mouseover_event: false,
 		less_character: 0,
 		ng_word: ''
 	};
@@ -13,6 +14,7 @@
 		options.hidden_reply = response.hidden_reply;
 		options.collapse_content = response.collapse_content;
 		options.reply_button = response.reply_button;
+		options.enable_mouseover_event = response.enable_mouseover_event;
 		if (response.less_character) {
 			options.less_character = response.less_character.match(/\d+/)? parseInt(response.less_character) : 0;
 		}
@@ -22,16 +24,64 @@
 		}
 	});
 
+	chrome.runtime.onMessage.addListener(
+		function(request, sender, sendResponse) {
+			// マウスオーバーイベントの記事本文の受け取り
+			if (request.masuda_content) {
+				var elm = document.getElementById(request.id);
+				elm.innerHTML = request.masuda_content;
+				// afc 削除
+				elm.removeChild(elm.querySelector('div.afc'));
+				sendResponse({});
+			}
+	});
+
 	function compact_na_masuda_GOGOGO(){
 		if (location.href.match(/http:\/\/anond.hatelabo.jp\/[!-~]+\/edit/)) {
 			// 編集ページの処理
 			edit_page_GOGOGO();
 		} else if (location.href.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
 			// 詳細ページの処理
+			if (options.enable_mouseover_event) {
+				set_mouseover_event();
+			}
 			detail_page_GOGOGO();
 		} else if (location.href.match(/http:\/\/anond.hatelabo.jp\/$|http:\/\/anond.hatelabo.jp\/\?page=[\d]+/)) {
 			// トップページとページ指定時の処理
+			if (options.enable_mouseover_event) {
+				set_mouseover_event();
+			}
 			top_page_GOGOGO();
+		}
+	}
+
+	function set_mouseover_event() {
+		// マウスオーバーイベント設定
+		var a_tags = document.querySelectorAll('a[href^="http://anond.hatelabo.jp"]');
+		for (var i = 0; i < a_tags.length; i++) {
+			if (a_tags[i].textContent != '■' && a_tags[i].href.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
+				a_tags[i].onmouseover = function(event){
+					var id = "id_masuda_" + this.href.substr(-14);
+					var elm = document.getElementById(id);
+					if (elm == null){
+						// tooltip用のdivを作成してbodyに追加
+						elm = document.createElement('div');
+						elm.id = id;
+						elm.className = 'masud_content_tooltip';
+						elm.textContent = '読み込み中...';
+						// mouseoutかclickで閉じる
+						elm.onclick = function(){ this.classList.toggle('hidden_masuda_content'); };
+						elm.setAttribute('style', 'top:' + event.pageY + ';left:' + event.pageX + ';');
+						document.body.appendChild(elm);
+
+						var params = {get_masuda_content: "1", url: this.href, id: id};
+						// メッセージを送ってURLの記事本文を取得（受け取りはonMessage.addListenerから）
+						chrome.runtime.sendMessage(params, function(response){});
+					} else {
+						elm.classList.toggle('hidden_masuda_content');
+					}
+				};
+			}
 		}
 	}
 
@@ -44,6 +94,10 @@
 				title.size = 40;
 				var body = document.getElementById('text-body');
 				body.focus();
+				// submitから1秒後に閉じる
+				document.forms.edit.addEventListener('submit', function(){
+					setTimeout(function(){ window.close(); }, 1000);
+				}, false);
 			}
 		});
 	}
