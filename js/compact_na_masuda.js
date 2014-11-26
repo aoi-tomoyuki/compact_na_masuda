@@ -78,6 +78,7 @@
 						// メッセージを送ってURLの記事本文を取得（受け取りはonMessage.addListenerから）
 						chrome.runtime.sendMessage(params, function(response){});
 					} else {
+						elm.setAttribute('style', 'top:' + event.pageY + ';left:' + event.pageX + ';');
 						elm.classList.toggle('hidden_masuda_content');
 					}
 				};
