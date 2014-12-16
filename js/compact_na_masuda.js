@@ -128,7 +128,7 @@
 		// ページ内の記事を取得
 		var sections = document.querySelectorAll('div#body div.body div.section');
 		for (var i = 0; i < sections.length; i++) {
-			var h3 = sections[i].firstChild;
+			var h3 = sections[i].querySelector('h3');
 			// 返信を非表示
 			if (options.hidden_reply == '1') {
 				// タイトル内のテキストで返信判定
