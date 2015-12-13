@@ -46,8 +46,8 @@
 				set_mouseover_event();
 			}
 			detail_page_GOGOGO();
-		} else if (location.href.match(/http:\/\/anond.hatelabo.jp\/$|http:\/\/anond.hatelabo.jp\/\?page=[\d]+/)) {
-			// トップページとページ指定時の処理
+		} else if (location.href.match(/http:\/\/anond.hatelabo.jp\/$|http:\/\/anond.hatelabo.jp\/\?page=[\d]+|http:\/\/anond.hatelabo.jp\/[0-9]{8}|http:\/\/anond.hatelabo.jp\/keyword\/.+/)) {
+			// トップページとページ指定、日付指定、キーワード指定の処理
 			if (options.enable_mouseover_event) {
 				set_mouseover_event();
 			}
