@@ -57,9 +57,9 @@
 
 	function set_mouseover_event() {
 		// マウスオーバーイベント設定
-		var a_tags = document.querySelectorAll('a[href^="http://anond.hatelabo.jp"]');
+		var a_tags = document.querySelectorAll('a[href^="http://anond.hatelabo.jp"], a[href^="/20"]');
 		for (var i = 0; i < a_tags.length; i++) {
-			if (a_tags[i].textContent != '■' && a_tags[i].href.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
+			if (a_tags[i].textContent.match(/トラックバック|Permalink|■/) == null && a_tags[i].href.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
 				a_tags[i].onmouseover = function(event){
 					var id = "id_masuda_" + this.href.substr(-14);
 					var elm = document.getElementById(id);
