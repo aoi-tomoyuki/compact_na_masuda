@@ -1,7 +1,81 @@
 document.addEventListener('DOMContentLoaded', function () {
-	restore_options();
-	document.querySelector('button').addEventListener("click", apply_options);
+	chrome.tabs.getSelected(null, function(tab) {
+		if (tab.url.indexOf('http://anond.hatelabo.jp') == 0) {
+			// オプション表示
+			document.getElementById('id_options').classList.remove('hidden');
+			restore_options();
+			document.querySelector('button').addEventListener("click", apply_options);
+		} else {
+			// ちょこっと増田表示
+			document.getElementById('id_chokotto_masuda').classList.remove('hidden');
+			get_masuda_top();
+		}
+	});
 });
+
+
+
+function get_masuda_top() {
+	// 増田トップを返す
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "http://anond.hatelabo.jp");
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4) {
+			// 取得できたらメッセージを返す
+			chokotto_masuda(xhr.responseText);
+		}
+	};
+	xhr.send();
+}
+
+function chokotto_masuda(html) {
+	var pos0 = 0;
+	while(true) {
+		var pos1 = html.indexOf('<div class="section">', pos0);
+		if (pos1 == -1) {
+			break;
+		}
+		var pos2 = html.indexOf('<h3>', pos1);
+		var pos3 = html.indexOf('</h3>', pos1) + 5;
+		var h3 = html.substr(pos2, pos3 - pos2);
+		// タグ除去
+		var tmp = h3.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'');
+		if (tmp.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
+			// タイトルが返信リンクだった場合は次へ行く
+			pos0 = pos3;
+			continue;
+		}
+		// リンク先取得
+		var pos4 = h3.indexOf('<a href="') + 9;
+		var pos5 = h3.indexOf('"><span class="sanchor">■');
+		var url = 'http://anond.hatelabo.jp' + h3.substr(pos4, pos5 - pos4);
+		// 文字数取得
+		var pos6 = html.indexOf('<p class="sectionfooter">', pos3);
+		var content = html.substr(pos3, pos6 - pos3);
+		var content_text = content.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'');
+		var len = '（' + content_text.length + '文字）';
+		// 先頭30文字取得
+		var chokotto = content_text.substr(0, 30);
+		
+		
+		var div = document.createElement('div');
+		div.classList.add('title_list');
+		var a = document.createElement('a');
+		a.textContent = tmp + len;
+		a.href = '#';
+		a.setAttribute('masuda_url', url);
+		a.addEventListener('click', function () {
+			chrome.tabs.create({ url: this.getAttribute('masuda_url') });
+		});
+		div.appendChild(a);
+		var span = document.createElement('span');
+		span.textContent = chokotto;
+		div.appendChild(document.createElement('br'));
+		div.appendChild(span)
+		document.getElementById('id_chokotto_masuda').appendChild(div);
+		pos0 = pos3;
+	}
+}
 
 
 function apply_options(){
