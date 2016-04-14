@@ -91,6 +91,7 @@ function apply_options(){
 	localStorage['collapse_content'] = document.getElementById('id_collapse_content').checked ? '1' : '';
 	localStorage['reply_button'] = document.getElementById('id_reply_button').checked ? '1' : '';
 	localStorage['enable_mouseover_event'] = document.getElementById('id_enable_mouseover_event').checked ? '1' : '';
+	localStorage['arashi'] = document.getElementById('id_arashi').checked ? '1' : '';
 	localStorage['less_character'] = document.getElementById('id_less_character').value;
 	localStorage['ng_word'] = document.getElementById('id_ng_word').value;
 	// 面倒なので選択中のタブをリロード
@@ -117,6 +118,9 @@ function restore_options(){
 	if(localStorage['enable_mouseover_event']) {
 		document.getElementById('id_enable_mouseover_event').checked = true;
 	}
+	if(localStorage['arashi']) {
+		document.getElementById('id_arashi').checked = true;
+	}
 	if(localStorage['less_character']) {
 		document.getElementById('id_less_character').value = localStorage['less_character'];
 	}
@@ -134,6 +138,7 @@ chrome.runtime.onMessage.addListener(
 				collapse_content: localStorage['collapse_content'] == '1'? true: false,
 				reply_button: localStorage['reply_button'] == '1'? true: false,
 				enable_mouseover_event: localStorage['enable_mouseover_event'] == '1'? true: false,
+				arashi: localStorage['arashi'] == '1'? true: false,
 				less_character: localStorage['less_character'],
 				ng_word: localStorage['ng_word']
 			});

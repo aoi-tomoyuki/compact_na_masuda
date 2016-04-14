@@ -15,6 +15,7 @@
 		options.collapse_content = response.collapse_content;
 		options.reply_button = response.reply_button;
 		options.enable_mouseover_event = response.enable_mouseover_event;
+		options.arashi= response.arashi;
 		if (response.less_character) {
 			options.less_character = response.less_character.match(/\d+/)? parseInt(response.less_character) : 0;
 		}
@@ -117,7 +118,7 @@
 	function top_page_GOGOGO(){
 		// NGワードの改行コードを変換
 		if (options.ng_word) {
-			options.ng_word = options.ng_word.replace(/\r\n|\r/g, '\n').replace(/\n/g, '|');
+			options.ng_word = options.ng_word.trim().replace(/\r\n|\r/g, '\n').replace(/\n/g, '|');
 		}
 		// 返信ボタン処理
 		if (options.reply_button) {
@@ -139,6 +140,21 @@
 			} else if (options.hidden_reply == '2') {
 				// タイトル、本文で返信判定
 				if (sections[i].textContent.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
+					sections[i].classList.add('hidden_masuda_content');
+					continue;
+				}
+			}
+			if (options.arashi) {
+				// 外部URLチェック
+				var a_tags = sections[i].querySelectorAll('a:not([class="keyword"])');
+				var count = 0;
+				for(var j = 0; j < a_tags.length; j++) {
+					if (!a_tags[j].href.match(/http:\/\/anond.hatelabo.jp/)) {
+						count++;
+					}
+				}
+				if (count >= 2) {
+					// 2回以上あったら非表示
 					sections[i].classList.add('hidden_masuda_content');
 					continue;
 				}

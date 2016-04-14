@@ -8,6 +8,7 @@ chrome.runtime.onMessage.addListener(
 				collapse_content: localStorage['collapse_content'] == '1'? true : false,
 				reply_button: localStorage['reply_button'] == '1'? true : false,
 				enable_mouseover_event: localStorage['enable_mouseover_event'] == '1'? true : false,
+				arashi: localStorage['arashi'] == '1'? true : false,
 				less_character: localStorage['less_character']? localStorage['less_character'] : 0,
 				ng_word: localStorage['ng_word']
 			});
