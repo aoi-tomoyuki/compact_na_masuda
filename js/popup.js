@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 	chrome.tabs.getSelected(null, function(tab) {
-		if (tab.url.indexOf('http://anond.hatelabo.jp') == 0) {
+		if (tab.url.indexOf('https://anond.hatelabo.jp') == 0) {
 			// オプション表示
 			document.getElementById('id_options').classList.remove('hidden');
 			restore_options();
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function get_masuda_top() {
 	// 増田トップを返す
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "http://anond.hatelabo.jp");
+	xhr.open('GET', "https://anond.hatelabo.jp");
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4) {
 			// 取得できたらメッセージを返す
@@ -40,7 +40,7 @@ function chokotto_masuda(html) {
 		var h3 = html.substr(pos2, pos3 - pos2);
 		// タグ除去
 		var tmp = h3.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'');
-		if (tmp.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
+		if (tmp.match(/https:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
 			// タイトルが返信リンクだった場合は次へ行く
 			pos0 = pos3;
 			continue;
@@ -48,7 +48,7 @@ function chokotto_masuda(html) {
 		// リンク先取得
 		var pos4 = h3.indexOf('<a href="') + 9;
 		var pos5 = h3.indexOf('"><span class="sanchor">■');
-		var url = 'http://anond.hatelabo.jp' + h3.substr(pos4, pos5 - pos4);
+		var url = 'https://anond.hatelabo.jp' + h3.substr(pos4, pos5 - pos4);
 		// 文字数取得
 		var pos6 = html.indexOf('<p class="sectionfooter">', pos3);
 		var content = html.substr(pos3, pos6 - pos3);
@@ -91,7 +91,6 @@ function apply_options(){
 	localStorage['collapse_content'] = document.getElementById('id_collapse_content').checked ? '1' : '';
 	localStorage['reply_button'] = document.getElementById('id_reply_button').checked ? '1' : '';
 	localStorage['enable_mouseover_event'] = document.getElementById('id_enable_mouseover_event').checked ? '1' : '';
-	localStorage['arashi'] = document.getElementById('id_arashi').checked ? '1' : '';
 	localStorage['less_character'] = document.getElementById('id_less_character').value;
 	localStorage['ng_word'] = document.getElementById('id_ng_word').value;
 	// 面倒なので選択中のタブをリロード
@@ -118,9 +117,6 @@ function restore_options(){
 	if(localStorage['enable_mouseover_event']) {
 		document.getElementById('id_enable_mouseover_event').checked = true;
 	}
-	if(localStorage['arashi']) {
-		document.getElementById('id_arashi').checked = true;
-	}
 	if(localStorage['less_character']) {
 		document.getElementById('id_less_character').value = localStorage['less_character'];
 	}
@@ -138,7 +134,6 @@ chrome.runtime.onMessage.addListener(
 				collapse_content: localStorage['collapse_content'] == '1'? true: false,
 				reply_button: localStorage['reply_button'] == '1'? true: false,
 				enable_mouseover_event: localStorage['enable_mouseover_event'] == '1'? true: false,
-				arashi: localStorage['arashi'] == '1'? true: false,
 				less_character: localStorage['less_character'],
 				ng_word: localStorage['ng_word']
 			});
