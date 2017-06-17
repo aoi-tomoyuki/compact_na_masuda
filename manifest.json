@@ -1,6 +1,6 @@
 {
   "name": "コンパクトな増田",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "manifest_version": 2,
   "description": "増田をコンパクトに表示できるんだ",
   "background": { 
@@ -13,11 +13,11 @@
   },
   "permissions": [
       "tabs",
-      "http://anond.hatelabo.jp/*"
+      "https://anond.hatelabo.jp/*"
   ],
   "content_scripts": [
     {
-      "matches": ["http://anond.hatelabo.jp/*"],
+      "matches": ["https://anond.hatelabo.jp/*"],
       "css": ["css/compact_na_masuda.css"],
       "run_at": "document_end",
       "js": ["js/compact_na_masuda.js"]

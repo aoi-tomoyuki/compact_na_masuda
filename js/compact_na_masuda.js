@@ -15,7 +15,6 @@
 		options.collapse_content = response.collapse_content;
 		options.reply_button = response.reply_button;
 		options.enable_mouseover_event = response.enable_mouseover_event;
-		options.arashi= response.arashi;
 		if (response.less_character) {
 			options.less_character = response.less_character.match(/\d+/)? parseInt(response.less_character) : 0;
 		}
@@ -38,16 +37,16 @@
 	});
 
 	function compact_na_masuda_GOGOGO(){
-		if (location.href.match(/http:\/\/anond.hatelabo.jp\/[!-~]+\/edit/)) {
+		if (location.href.match(/https:\/\/anond.hatelabo.jp\/[!-~]+\/edit/)) {
 			// 編集ページの処理
 			edit_page_GOGOGO();
-		} else if (location.href.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
+		} else if (location.href.match(/https:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
 			// 詳細ページの処理
 			if (options.enable_mouseover_event) {
 				set_mouseover_event();
 			}
 			detail_page_GOGOGO();
-		} else if (location.href.match(/http:\/\/anond.hatelabo.jp\/$|http:\/\/anond.hatelabo.jp\/(.)+page=[\d]+|http:\/\/anond.hatelabo.jp\/[0-9]{8}|http:\/\/anond.hatelabo.jp\/keyword\/.+/)) {
+		} else if (location.href.match(/https:\/\/anond.hatelabo.jp\/$|https:\/\/anond.hatelabo.jp\/(.)+page=[\d]+|https:\/\/anond.hatelabo.jp\/[0-9]{8}|https:\/\/anond.hatelabo.jp\/keyword\/.+/)) {
 			// トップページとページ指定、日付指定、キーワード指定の処理
 			if (options.enable_mouseover_event) {
 				set_mouseover_event();
@@ -58,9 +57,9 @@
 
 	function set_mouseover_event() {
 		// マウスオーバーイベント設定
-		var a_tags = document.querySelectorAll('a[href^="http://anond.hatelabo.jp"], a[href^="/20"]');
+		var a_tags = document.querySelectorAll('a[href^="https://anond.hatelabo.jp"], a[href^="/20"]');
 		for (var i = 0; i < a_tags.length; i++) {
-			if (a_tags[i].textContent.match(/トラックバック|Permalink|■/) == null && a_tags[i].href.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
+			if (a_tags[i].textContent.match(/トラックバック|Permalink|■/) == null && a_tags[i].href.match(/https:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
 				a_tags[i].onmouseover = function(event){
 					var id = "id_masuda_" + this.href.substr(-14);
 					var elm = document.getElementById(id);
@@ -72,14 +71,14 @@
 						elm.textContent = '読み込み中...';
 						// mouseoutかclickで閉じる
 						elm.onclick = function(){ this.classList.toggle('hidden_masuda_content'); };
-						elm.setAttribute('style', 'top:' + event.pageY + ';left:' + event.pageX + ';');
+						elm.setAttribute('style', 'top:' + event.pageY + 'px;left:' + event.pageX + 'px;');
 						document.body.appendChild(elm);
 
 						var params = {get_masuda_content: "1", url: this.href, id: id};
 						// メッセージを送ってURLの記事本文を取得（受け取りはonMessage.addListenerから）
 						chrome.runtime.sendMessage(params, function(response){});
 					} else {
-						elm.setAttribute('style', 'top:' + event.pageY + ';left:' + event.pageX + ';');
+						elm.setAttribute('style', 'top:' + event.pageY + 'px;left:' + event.pageX + 'px;');
 						elm.classList.toggle('hidden_masuda_content');
 					}
 				};
@@ -133,28 +132,13 @@
 			// 返信を非表示
 			if (options.hidden_reply == '1') {
 				// タイトル内のテキストで返信判定
-				if (h3.textContent.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
+				if (h3.textContent.match(/https:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
 					sections[i].classList.add('hidden_masuda_content');
 					continue;
 				}
 			} else if (options.hidden_reply == '2') {
 				// タイトル、本文で返信判定
-				if (sections[i].textContent.match(/http:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
-					sections[i].classList.add('hidden_masuda_content');
-					continue;
-				}
-			}
-			if (options.arashi) {
-				// 外部URLチェック
-				var a_tags = sections[i].querySelectorAll('a:not([class="keyword"])');
-				var count = 0;
-				for(var j = 0; j < a_tags.length; j++) {
-					if (!a_tags[j].href.match(/http:\/\/anond.hatelabo.jp/)) {
-						count++;
-					}
-				}
-				if (count >= 2) {
-					// 2回以上あったら非表示
+				if (sections[i].textContent.match(/https:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
 					sections[i].classList.add('hidden_masuda_content');
 					continue;
 				}
