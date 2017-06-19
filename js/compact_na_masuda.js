@@ -37,16 +37,16 @@
 	});
 
 	function compact_na_masuda_GOGOGO(){
-		if (location.href.match(/https:\/\/anond.hatelabo.jp\/[!-~]+\/edit/)) {
+		if (location.href.match(/https?:\/\/anond.hatelabo.jp\/[!-~]+\/edit/)) {
 			// 編集ページの処理
 			edit_page_GOGOGO();
-		} else if (location.href.match(/https:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
+		} else if (location.href.match(/https?:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
 			// 詳細ページの処理
 			if (options.enable_mouseover_event) {
 				set_mouseover_event();
 			}
 			detail_page_GOGOGO();
-		} else if (location.href.match(/https:\/\/anond.hatelabo.jp\/$|https:\/\/anond.hatelabo.jp\/(.)+page=[\d]+|https:\/\/anond.hatelabo.jp\/[0-9]{8}|https:\/\/anond.hatelabo.jp\/keyword\/.+/)) {
+		} else if (location.href.match(/https?:\/\/anond.hatelabo.jp\/$|https?:\/\/anond.hatelabo.jp\/(.)+page=[\d]+|https?:\/\/anond.hatelabo.jp\/[0-9]{8}|https?:\/\/anond.hatelabo.jp\/keyword\/.+/)) {
 			// トップページとページ指定、日付指定、キーワード指定の処理
 			if (options.enable_mouseover_event) {
 				set_mouseover_event();
@@ -57,9 +57,14 @@
 
 	function set_mouseover_event() {
 		// マウスオーバーイベント設定
-		var a_tags = document.querySelectorAll('a[href^="https://anond.hatelabo.jp"], a[href^="/20"]');
+		var a_tags = document.querySelectorAll('a[href*="anond.hatelabo.jp"], a[href^="/20"]');
 		for (var i = 0; i < a_tags.length; i++) {
-			if (a_tags[i].textContent.match(/トラックバック|Permalink|■/) == null && a_tags[i].href.match(/https:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
+			if (a_tags[i].textContent.match(/トラックバック|Permalink|■/) == null && a_tags[i].href.match(/https?:\/\/anond.hatelabo.jp\/[0-9]{14}/)) {
+				if (a_tags[i].href.substr(0, 5) == "http:"){
+					// リンクをhttpからhttpsへ変換
+					a_tags[i].href = a_tags[i].href.replace("http", "https");
+				}
+				
 				a_tags[i].onmouseover = function(event){
 					var id = "id_masuda_" + this.href.substr(-14);
 					var elm = document.getElementById(id);
@@ -132,13 +137,13 @@
 			// 返信を非表示
 			if (options.hidden_reply == '1') {
 				// タイトル内のテキストで返信判定
-				if (h3.textContent.match(/https:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
+				if (h3.textContent.match(/https?:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
 					sections[i].classList.add('hidden_masuda_content');
 					continue;
 				}
 			} else if (options.hidden_reply == '2') {
 				// タイトル、本文で返信判定
-				if (sections[i].textContent.match(/https:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
+				if (sections[i].textContent.match(/https?:\/\/anond.hatelabo.jp\/[0-9]{14}|anond:[0-9]{14}/)) {
 					sections[i].classList.add('hidden_masuda_content');
 					continue;
 				}
